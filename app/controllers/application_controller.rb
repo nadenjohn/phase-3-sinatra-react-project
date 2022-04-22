@@ -7,18 +7,42 @@ class ApplicationController < Sinatra::Base
     menu_items.to_json
   end
 
-  get "/menu_items/:id" do
-    menu_item = MenuItem.find(params[:id])
-    menu_item.to_json(include: :reviews)
+  post "/menu_items" do
+    menu_item = MenuItem.create(
+      name: params[:name],
+      price: params[:price],
+      img: params[:img]
+    )
+    menu_item.to_json
   end
+
   
   get "/reviews" do
     reviews = Review.all
     reviews.to_json
   end
 
-  get "/users" do
-    users = User.all
-    users.to_json
+  post "/reviews" do
+    review = Review.create(
+      content: params[:content],
+      name: params[:name]
+    )
+    review.to_json
   end
+
+  patch "/reviews/:id" do
+    review= Review.find(params[:id])
+    review.update(
+      content: params[:content],
+      name: params[:name]
+    )
+    review.to_json
+  end
+
+  delete "/review/:id" do
+    review=Review.find(params[:id])
+    review.destroy
+  end
+    
 end
+
